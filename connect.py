@@ -4,7 +4,7 @@ dbuser = "root" #PUT YOUR MySQL username here - usually root
 dbpass = "JinkelaP2333" #PUT YOUR PASSWORD HERE
 dbhost = "localhost" 
 dbport = "3306"
-dbname = "carRental"
+dbname = "carrental"
 
 # dbuser = "HaochenZhu2023" #PUT YOUR MySQL username here - usually root
 # dbpass = "JinkelaP2333" #PUT YOUR PASSWORD HERE

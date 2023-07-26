@@ -1,8 +1,4 @@
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import redirect
-from flask import url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import re
 from datetime import datetime
 import mysql.connector
@@ -38,3 +34,21 @@ def home():
 @app.route("/")
 def signUp():
     return render_template("index.html")
+
+@app.route('/logout')
+def logout():
+    # Remove session data, this will log the user out
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    # Redirect to login page
+    return render_template("index.html")
+
+@app.route('/dashboard1')
+def dashboard1():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        return render_template('dash1.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
