@@ -1,11 +1,10 @@
-from app import app
+from app import app, connect
 
 from flask import render_template, request, redirect, url_for, session, flash
 import re
 from datetime import datetime
 import mysql.connector
 from mysql.connector import FieldType
-import connect
 import bcrypt
 
 dbconn = None
@@ -22,10 +21,18 @@ def getCursor():
                 
 app.secret_key = 'youCannotGuessIt'
 
+# check whether a user is admin or staff or customer
+def userInfo():
+    connection = getCursor()
+    connection.execute('SELECT userID, userPermission, email, phoneNumber, userAddress FROM users \
+                           WHERE userID = %s', (session['id'],))
+    userPermission = connection.fetchall()
+    return userPermission
+
 # redirect all 404 pages to my bootstrapped one.
 @app.errorhandler(404)
 def pageNotFound(error):
-    return render_template('404.html'), 404
+    return render_template('404.html',session=session), 404
 
 #The index page of the web app
 @app.route("/", methods=['GET','POST'])
@@ -40,8 +47,13 @@ def index():
     loginUsername = request.form.get('loginUsername')
     loginPassword = request.form.get('loginPassword')
 
+    
+    # check if logged in
+    if 'loggedin' in session:
+        return redirect("/dashboard")
+
     #check if user want to login or sign up    
-    if userName:
+    elif userName:
         #form info back-end validation
         connection = getCursor()
         connection.execute('SELECT * FROM users WHERE userName = %s', (userName,))
@@ -92,12 +104,7 @@ def index():
                 session['id'] = account[0][0]
                 session['username'] = account[0][2]
                 # Redirect to home page
-                if userPermission == 1:
-                    return render_template("dash1.html")
-                elif userPermission == 2:
-                    return render_template("dash2.html")
-                elif userPermission == 3:
-                    return render_template("dash3.html")
+                return redirect('/dashboard')
             else:
                 msg = 'Failed login: Account not exist or incorrect password!'
                 return render_template("index.html", msg=msg)
@@ -117,11 +124,29 @@ def logout():
     # Redirect to login page
     return redirect("/")
 
-@app.route('/dashboard1')
-def dashboard1():
+@app.route('/dashboard')
+def dashboard():
     # Check if user is loggedin
     if 'loggedin' in session:
-        # User is loggedin show them the home page
-        return render_template('dash1.html', username=session['username'])
+        # Check permission
+        
+        if userInfo()[0][1] == 1:
+            return render_template('dash1.html', username=session['username'])
+        elif userInfo()[0][1] == 2:
+            return render_template('dash2.html', username=session['username'])
+        elif userInfo()[0][1] == 3:
+            return render_template('dash3.html', username=session['username'])
     # User is not loggedin redirect to login page
-    return redirect('/')
+    else:
+        return redirect('/')
+    
+@app.route('/profile')
+def profile():
+    if 'loggedin' in session:
+        userInfo()
+        return render_template('profile.html', session=session, userEmail=userInfo()[0][2], \
+                               phoneNumber=userInfo()[0][3], userAddress=userInfo()[0][4])
+
+
+    else:
+        return redirect('/')
