@@ -1,0 +1,106 @@
+<!-- This is the dashboard for admin. -->
+{% extends "base-loggedin.html" %}
+{% block title %}Dashboard - Admin{% endblock %}
+
+{% block content %}
+
+<div class="px-4 pt-1 my-1">
+    <h1 class="display-4 text-body-emphasis fw-bold">Profile</h1>
+    <p class="lead">Have a look at your profile, {{session['username']}}!</p>
+
+    <div class="col-lg-6">
+        <br />
+
+        <!-- Members -->
+
+        <form method="POST" action="/" id="edit-form" class="needs-validation" novalidate>
+            <div class="modal-body">
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+                        <label for="userName" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="userName" name="userName"
+                            value="{{session['username']}}" pattern="^[a-zA-Z0-9]*$" maxlength="20" disabled>
+                        <div class="invalid-feedback">
+                            Invalid. Alphabets and numbers only. max 20 characters.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="userPassword" name="userPassword"
+                             pattern="^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{8,}$" maxlength="30">
+                        <div class="invalid-feedback">
+                            Alphabets and numbers only. Must have one capitalised
+                            character. Minimum 8 characters.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="userEmail" name="userEmail"
+                            placeholder="email@example.co.nz" value="{{userEmail}}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" maxlength="255">
+                        <div class="invalid-feedback">
+                            Invalid.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                            placeholder="Phone Number" value="{{phoneNumber}}" pattern="^[0-9]+$" maxlength="12"
+                            >
+                        <div class="invalid-feedback">
+                            Invalid. Numbers Only.
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="userAddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="userAddress" name="userAddress"
+                            placeholder="Address" value="{{userAddress}}" maxlength="100">
+                        <div class="invalid-feedback">
+                            Invalid.
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            
+        </form>
+        <div class="my-3">
+            <button type="submit" class="btn btn-warning">Update</button>
+        </div>
+
+
+        <script>
+            (() => {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+        </script>
+        <br />
+
+    </div>
+
+</div>
+
+
+{% endblock %}
