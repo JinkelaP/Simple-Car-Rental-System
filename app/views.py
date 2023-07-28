@@ -29,6 +29,13 @@ def userInfo():
     userPermission = connection.fetchall()
     return userPermission
 
+# encapsulate the passwordEncrypt function
+def passwordEncrypt(userPassword):
+    bytes = userPassword.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashedPsw = bcrypt.hashpw(bytes, salt)
+    return hashedPsw
+
 # redirect all 404 pages to my bootstrapped one.
 @app.errorhandler(404)
 def pageNotFound(error):
@@ -70,15 +77,13 @@ def index():
 
         else:
         # use bcrypt to encrypt the password
-            bytes = userPassword.encode('utf-8')
-            salt = bcrypt.gensalt()
-            hashedPsw = bcrypt.hashpw(bytes, salt)
+            encryptedPassword = passwordEncrypt(userPassword)
             # create account
             connection.execute("INSERT INTO users \
                             (userPermission,userName,userPassword, \
                             email, phoneNumber, userAddress)\
                             VALUES (%s, %s, %s, %s, %s, %s);", \
-                                (userPermission, userName, hashedPsw, \
+                                (userPermission, userName, encryptedPassword, \
                                 email, phoneNumber, userAddress))
             
             msg = 'You have successfully signed up!'
