@@ -84,25 +84,21 @@
                                 </div>
 
                                 <div class="col-sm-6">
+                                    <label for="realName" class="form-label">Your name</label>
+                                    <input type="text" class="form-control" id="realName" name="realName"
+                                        placeholder="Your name" pattern="[a-zA-Z]+" maxlength="20" required>
+                                    <div class="invalid-feedback">
+                                        Invalid. Alphabets only. max 20 characters.
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
                                     <label for="phoneNumber" class="form-label">Phone Number</label>
                                     <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                         placeholder="Phone Number" pattern="^[0-9]+$" maxlength="12"
                                         required>
                                     <div class="invalid-feedback">
                                         Invalid. Numbers Only.
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <label for="permission" class="form-label">Character</label>
-                                    <select class="form-select" id="permission" name="permission" required>
-                                        <option value="" disabled selected>Please select</option>
-                                        <option value="1">Admin</option>
-                                        <option value="2">Staff</option>
-                                        <option value="3">Customer</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Please select the character.
                                     </div>
                                 </div>
 

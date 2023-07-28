@@ -44,12 +44,12 @@ def pageNotFound(error):
 #The index page of the web app
 @app.route("/", methods=['GET','POST'])
 def index():    
-    userPermission = request.form.get('permission')
     userName = request.form.get('userName')
     userPassword = request.form.get('userPassword')
     email = request.form.get('userEmail')
     phoneNumber = request.form.get('phoneNumber')
     userAddress = request.form.get('userAddress')
+    realName = request.form.get('realName')
 
     loginUsername = request.form.get('loginUsername')
     loginPassword = request.form.get('loginPassword')
@@ -78,12 +78,21 @@ def index():
         else:
         # use bcrypt to encrypt the password
             encryptedPassword = passwordEncrypt(userPassword)
-            # create account
+            # create account in users
             connection.execute("INSERT INTO users \
-                            (userPermission,userName,userPassword, \
+                            (userPermission,userName,userPassword) \
+                            VALUES (3, %s, %s);", \
+                                (userName, encryptedPassword))
+            
+            # create account in customers
+            connection.execute('SELECT userID FROM users WHERE userName = %s', (userName,))
+            userID = connection.fetchall()[0][0]
+
+            connection.execute("INSERT INTO customerinfo \
+                            (userID, realName, \
                             email, phoneNumber, userAddress)\
-                            VALUES (%s, %s, %s, %s, %s, %s);", \
-                                (userPermission, userName, encryptedPassword, \
+                            VALUES (%s, %s, %s, %s, %s);", \
+                                (userID, realName, \
                                 email, phoneNumber, userAddress))
             
             msg = 'You have successfully signed up!'
