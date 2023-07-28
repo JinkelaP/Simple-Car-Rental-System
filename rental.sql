@@ -4,10 +4,31 @@ userID INT auto_increment PRIMARY KEY NOT NULL,
 userPermission INT NOT NULL,
 -- 1 is admin, 2 is staff, 3 is customer
 userName VARCHAR(80) NOT NULL,
-userPassword VARCHAR NOT NULL,
+userPassword VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS staffInfo
+(
+userID INT NOT NULL,
 email VARCHAR(255) NOT NULL,
 phoneNumber BIGINT,
-userAddress VARCHAR(200)
+userAddress VARCHAR(200),
+
+FOREIGN KEY (userID) REFERENCES users(userID)
+ON UPDATE CASCADE
+ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS customerInfo
+(
+userID INT NOT NULL,
+email VARCHAR(255) NOT NULL,
+phoneNumber BIGINT,
+userAddress VARCHAR(200),
+
+FOREIGN KEY (userID) REFERENCES users(userID)
+ON UPDATE CASCADE
+ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS cars
