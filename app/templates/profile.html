@@ -13,9 +13,18 @@
 
         <!-- Members -->
 
-        <form method="POST" action="/" id="edit-form" class="needs-validation" novalidate>
+        <form method="POST" action="/profile" id="edit-form" class="needs-validation" novalidate>
             <div class="modal-body">
                 <div class="row g-3">
+
+                    <div class="col-12">
+                        <label for="realName" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="realName" name="realName" placeholder="Name"
+                            value="{{realName}}" maxlength="80">
+                        <div class="invalid-feedback">
+                            Invalid.
+                        </div>
+                    </div>
 
                     <div class="col-sm-6">
                         <label for="userName" class="form-label">Username</label>
@@ -29,7 +38,7 @@
                     <div class="col-sm-6">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="userPassword" name="userPassword"
-                             pattern="^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{8,}$" maxlength="30">
+                            pattern="^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{8,}$" maxlength="30">
                         <div class="invalid-feedback">
                             Alphabets and numbers only. Must have one capitalised
                             character. Minimum 8 characters.
@@ -39,7 +48,8 @@
                     <div class="col-sm-6">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="userEmail" name="userEmail"
-                            placeholder="email@example.co.nz" value="{{userEmail}}" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" maxlength="255">
+                            placeholder="email@example.co.nz" value="{{userEmail}}"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" maxlength="255">
                         <div class="invalid-feedback">
                             Invalid.
                         </div>
@@ -48,8 +58,7 @@
                     <div class="col-sm-6">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                            placeholder="Phone Number" value="{{phoneNumber}}" pattern="^[0-9]+$" maxlength="12"
-                            >
+                            placeholder="Phone Number" value="{{phoneNumber}}" pattern="^[0-9]+$" maxlength="12">
                         <div class="invalid-feedback">
                             Invalid. Numbers Only.
                         </div>
@@ -69,11 +78,12 @@
 
                 </div>
             </div>
-            
+            <div class="my-3">
+                <button type="submit" class="btn btn-warning">Update</button>
+            </div>
+
         </form>
-        <div class="my-3">
-            <button type="submit" class="btn btn-warning">Update</button>
-        </div>
+
 
 
         <script>
@@ -96,6 +106,13 @@
                 })
             })()
         </script>
+        <script>
+            // alert for successful logout
+            var successMessage = "{{ get_flashed_messages(category_filter=['success'])[0] }}";
+            if (successMessage) {
+              alert(successMessage);
+            }
+          </script>
         <br />
 
     </div>
