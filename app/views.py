@@ -149,14 +149,22 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard():
+    connection = getCursor()
+    connection.execute('SELECT COUNT(*) FROM customerinfo;')
+    customerTotal = connection.fetchall()
+    connection.execute('SELECT COUNT(*) FROM staffinfo;')
+    staffTotal = connection.fetchall()
+    connection.execute('SELECT COUNT(*) FROM cars;')
+    carTotal = connection.fetchall()
     # Check if user is loggedin
     if 'loggedin' in session:
         # Check permission
-        
         if userInfo()[0][0][1] == 1:
-            return render_template('dash1.html', username=userInfo()[1][0][1])
+            return render_template('dash1.html', username=userInfo()[1][0][1], customerTotal=customerTotal[0][0],\
+                                   staffTotal=staffTotal[0][0],carTotal=carTotal[0][0])
         elif userInfo()[0][0][1] == 2:
-            return render_template('dash2.html', username=userInfo()[1][0][1])
+            return render_template('dash2.html', username=userInfo()[1][0][1], customerTotal=customerTotal[0][0],\
+                                   staffTotal=staffTotal[0][0],carTotal=carTotal[0][0])
         elif userInfo()[0][0][1] == 3:
             return render_template('dash3.html', username=userInfo()[1][0][1])
     # User is not loggedin redirect to login page
