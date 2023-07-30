@@ -24,10 +24,19 @@ app.secret_key = 'youCannotGuessIt'
 # check whether a user is admin or staff or customer
 def userInfo():
     connection = getCursor()
-    connection.execute('SELECT userID, userPermission, email, phoneNumber, userAddress FROM users \
-                           WHERE userID = %s', (session['id'],))
-    userPermission = connection.fetchall()
-    return userPermission
+    connection.execute('SELECT userID, userPermission, userName FROM users \
+                           WHERE userID = %s;', (session['id'],))
+    userBasic = connection.fetchall()
+
+    if userBasic[0][1] == 1 or userBasic[0][1] == 2:
+        infoTable = 'staffinfo'
+    else:
+        infoTable = 'customerinfo'
+    
+    getInfoDetails = f'SELECT userID, realName, email, phoneNumber, userAddress FROM {infoTable} WHERE userID = %s;'
+    connection.execute(getInfoDetails, (session['id'],))
+    userInfoDetails = connection.fetchall()
+    return userBasic, userInfoDetails
 
 # encapsulate the passwordEncrypt function
 def passwordEncrypt(userPassword):
@@ -101,13 +110,13 @@ def index():
 
     elif loginUsername:
         connection = getCursor()
-        connection.execute('SELECT * FROM users WHERE userName = %s', (loginUsername,))
+        connection.execute('SELECT * FROM users WHERE userName = %s;', (loginUsername,))
         account = connection.fetchall()
         # If account exists show error and check password
         if not account:
             msg = 'Failed login: Account not exist or incorrect password!'
             
-            return render_template("index.html", msg=msg)
+            return render_template("index.html", msg=msg, loginUsername=loginUsername)
         else:
             password = account[0][3]
             userPermission = account[0][1]
@@ -121,10 +130,10 @@ def index():
                 return redirect('/dashboard')
             else:
                 msg = 'Failed login: Account not exist or incorrect password!'
-                return render_template("index.html", msg=msg)
+                return render_template("index.html", msg=msg, loginUsername=loginUsername)
     
     
-    return render_template("index.html")
+    return render_template("index.html",loginUsername = loginUsername)
     
 
 @app.route('/logout')
@@ -144,22 +153,67 @@ def dashboard():
     if 'loggedin' in session:
         # Check permission
         
-        if userInfo()[0][1] == 1:
-            return render_template('dash1.html', username=session['username'])
-        elif userInfo()[0][1] == 2:
-            return render_template('dash2.html', username=session['username'])
-        elif userInfo()[0][1] == 3:
-            return render_template('dash3.html', username=session['username'])
+        if userInfo()[0][0][1] == 1:
+            return render_template('dash1.html', username=userInfo()[1][0][1])
+        elif userInfo()[0][0][1] == 2:
+            return render_template('dash2.html', username=userInfo()[1][0][1])
+        elif userInfo()[0][0][1] == 3:
+            return render_template('dash3.html', username=userInfo()[1][0][1])
     # User is not loggedin redirect to login page
     else:
         return redirect('/')
     
-@app.route('/profile')
+@app.route('/profile', methods=['GET','POST'])
 def profile():
+    userPassword = request.form.get('userPassword')
+    email = request.form.get('userEmail')
+    phoneNumber = request.form.get('phoneNumber')
+    userAddress = request.form.get('userAddress')
+    realName = request.form.get('realName')
+    userInfoList = [realName,  email, phoneNumber, userAddress]
+    infoTable = ['realName', 'email', 'phoneNumber', 'userAddress']
+    
     if 'loggedin' in session:
-        userInfo()
-        return render_template('profile.html', session=session, userEmail=userInfo()[0][2], \
-                               phoneNumber=userInfo()[0][3], userAddress=userInfo()[0][4])
+        #update info
+        updateStatusPsw = None
+        updateStatusGeneral = None
+        
+        if email or phoneNumber or userAddress or realName:
+            for index, item in enumerate(userInfoList):
+                if item:
+                    if userInfo()[0][0][1] == 3:
+                        updateCustomerInfo = f'UPDATE customerinfo SET {str(infoTable[index])} = "{item}" WHERE userID = %s ;'
+                        connection = getCursor()
+                        connection.execute(updateCustomerInfo,\
+                                            (session['id'],))
+                    else:
+                        updateStaffInfo = f'UPDATE staffinfo SET {str(infoTable[index])} = "{item}" WHERE userID = %s ;'
+                        connection = getCursor()
+                        connection.execute(updateStaffInfo,\
+                                            (session['id'],))
+            updateStatusGeneral = True
+        
+        if userPassword:
+            connection = getCursor()
+            connection.execute('UPDATE users SET userPassword = %s WHERE userID = %s ;', (passwordEncrypt(userPassword), session['id'],))
+            session.pop('loggedin', None)
+            session.pop('id', None)
+            session.pop('username', None)
+            updateStatusPsw = True
+        
+        if updateStatusGeneral == True:
+            if updateStatusPsw == True:
+                flash('Profile update successful! You have been logged out due to password update.', 'success')
+                return redirect('/')
+            else:
+                flash('Profile update successful!', 'success')
+                return redirect('/profile')
+
+        #show page
+        else:
+            userInfo()
+            return render_template('profile.html', session=session, realName=userInfo()[1][0][1], userEmail=userInfo()[1][0][2], \
+                                phoneNumber=userInfo()[1][0][3], userAddress=userInfo()[1][0][4])
 
 
     else:
