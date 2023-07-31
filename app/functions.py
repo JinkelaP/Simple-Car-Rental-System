@@ -36,14 +36,16 @@ def userInfo():
     userInfoDetails = connection.fetchall()
     return userBasic, userInfoDetails
 
-# encapsulate the passwordEncrypt function
-def passwordEncrypt(userPassword):
-    bytes = userPassword.encode('utf-8')
-    salt = bcrypt.gensalt()
-    hashedPsw = bcrypt.hashpw(bytes, salt)
-    return hashedPsw
 
-# redirect all 404 pages to my bootstrapped one.
-@app.route("/carsList", methods=['GET','POST'])
+# car list showing all car information
+@app.route("/carsList")
 def carList():
-    
+    if 'loggedin' in session:
+        connection = getCursor()
+        connection.execute('SELECT * FROM cars;')
+        allCars = connection.fetchall()
+        return render_template('carList.html', allCars=allCars)
+
+
+    else:
+        return redirect('/')
