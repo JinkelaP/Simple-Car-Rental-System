@@ -2,7 +2,6 @@ from app import app, connect
 
 from flask import render_template, request, redirect, url_for, session, flash
 import re
-from datetime import datetime
 import mysql.connector
 from mysql.connector import FieldType
 import bcrypt
