@@ -39,13 +39,40 @@ def userInfo():
 
 # car list showing all car information
 @app.route("/carsList")
-def carList():
+def carsList():
     if 'loggedin' in session:
         connection = getCursor()
         connection.execute('SELECT * FROM cars;')
         allCars = connection.fetchall()
         return render_template('carList.html', allCars=allCars)
 
+    else:
+        return redirect('/')
 
+# car list but editable in order to add/edit
+@app.route("/carsListEdit", methods = ['GET','POST'])
+def carsListEdit():
+    if 'loggedin' in session and userInfo()[0][0][1] != 3:
+        connection = getCursor()
+        connection.execute('SELECT * FROM cars;')
+        allCars = connection.fetchall()
+        return render_template('carListEdit.html', allCars=allCars)
+
+
+    else:
+        return redirect('/')
+    
+# car  add/edit
+@app.route("/carsOperation", methods = ['POST'])
+def carsOperation():
+    if 'loggedin' in session and userInfo()[0][0][1] != 3:
+        pass
+    else:
+        return redirect('/')
+
+@app.route("/carsAdd", methods = ['POST'])
+def carsAdd():
+    if 'loggedin' in session and userInfo()[0][0][1] != 3:
+        pass
     else:
         return redirect('/')
