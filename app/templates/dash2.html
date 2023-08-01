@@ -1,33 +1,42 @@
 <!-- This is the dashboard for admin. -->
-{% extends "base-loggedin.html" %}
-{% block title %}Dashboard - Staff{% endblock %}
+{% extends "base.html" %}
+{% block title %}Dashboard - Admin - Simpler Rental{% endblock %}
 
 {% block content %}
 
 <div class="px-4 pt-1 my-1">
-    <h1 class="display-4 text-body-emphasis fw-bold">Hi {{username}}!</h1>
+    <div class="d-flex top-0 mb-2 pb-3 align-items-end border-bottom">
+        <h1 class="display-4 text-body-emphasis fw-bold">Hi {{username}}!</h1><span
+            class="badge text-bg-danger">Admin</span>
+    </div>
+    <div class="col-lg-12 my-2">
+        <a class="btn btn-primary btn-sm px-4 my-2 mx-1" href="/carsList">All Cars</a>
+        <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/carsListEdit">Manage Cars</a>
+        <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/manageCustomers">Manage Customers</a>
+        <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/manageStaff">Manage Staff</a>
+    </div>
+    <h2 class="text-body-emphasis mt-2 pt-1"> You have</h2>
 
-    <a class="btn btn-outline-primary btn-lg px-4 my-2 mx-1" href="#members">Members</a>
-    <a class="btn btn-outline-primary btn-lg px-4 my-2 mx-1" href="#events">Events</a>
-    <a class="btn btn-outline-primary btn-lg px-4 my-2 mx-1" href="#stages">Stages</a>
-    <a class="btn btn-outline-primary btn-lg px-4 my-2 mx-1" href="#results">Results</a>
 
     <div class="col-lg-12">
-        <br />
 
-        <!-- Members -->
-        <div id="members" class="col-md-7 col-lg-6">
-            <h3 class="text-body-emphasis fw-bold">All Members</h3>
-            <p class="lead">Ordered by team & lastname</p>
-            <button type="button" class="btn btn-warning px-4 mb-3" data-bs-toggle="modal"
-                data-bs-target="#add-member">Add a new member</button>
-            <!-- Add members page -->
+        <div class="row">
+            <div class="d-flex align-items-end col-sm-3">
+                <h1 class="display-1 me-3">{{carTotal}}</h1>
+                <h5 class="text-body-emphasis fw-bold me-3">cars, </h5>
+            </div>
+            <div class="d-flex align-items-end col-sm-3">
+                <h1 class="display-1 me-3">{{customerTotal}}</h1>
+                <h5 class="text-body-emphasis fw-bold me-3">customers, </h5>
+            </div>
+            <div class="d-flex align-items-end col-sm-3">
+                <h1 class="display-1 me-3">{{staffTotal}}</h1>
+                <h5 class="text-body-emphasis fw-bold me-3">staff!</h5>
+            </div>
         </div>
-        <br />
 
     </div>
 
 </div>
-
 
 {% endblock %}

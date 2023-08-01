@@ -1,0 +1,266 @@
+<!-- This is the dashboard for admin. -->
+{% extends "base.html" %}
+{% block title %}Cars - Simpler Rental{% endblock %}
+
+{% block content %}
+
+<div class="px-4 pt-1 my-1">
+    <div class="border-bottom">
+        <h1 class="display-4 text-body-emphasis fw-bold">Manage cars</h1>
+        <p class="lead"></p>
+
+    </div>
+
+
+
+    <div class="container">
+        <!-- Add a new car function modal -->
+        <button type="button" class="btn btn-warning px-4 my-3" data-bs-toggle="modal" data-bs-target="#add-car">Add a new car</button>
+        <div class="container w-50 m-auto">
+            <div class="modal fade" id="add-car" tabindex="-1"
+                aria-labelledby="carTitle" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="carTitleAdd">Add a new car</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="/carsAdd" id="add-form" class="needs-validation"
+                            novalidate enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="row g-3">
+                                    
+                                    <label for="carfile">Upload new photo (not compulsory)</label>
+                                    <input type="file" id="carfileAdd" name="carfileAdd" accept="image/jpeg"><br>
+
+                                    <div class="col-12">
+                                        <label for="rego" class="form-label">Rego</label>
+                                        <input type="text" class="form-control" id="regoAdd" name="regoAdd"
+                                            placeholder="Rego" pattern="[A-Z0-9]*" maxlength="6"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Invalid. Capitalised alphabets and numbers only.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="year" class="form-label">Year</label>
+                                        <input type="text" class="form-control" id="yearAdd" name="yearAdd"
+                                            placeholder="Year" pattern="[0-9]*" maxlength="4"
+                                             required>
+                                        <div class="invalid-feedback">
+                                            Invalid. Numbers only.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="brand" class="form-label">Manufacturer</label>
+                                        <input type="text" class="form-control" id="brandAdd" name="brandAdd"
+                                            placeholder="brand" pattern="[A-Za-z]*" 
+                                            maxlength="30" required>
+                                        <div class="invalid-feedback">
+                                            Invalid. Alphabets only.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="model" class="form-label">Model</label>
+                                        <input type="text" class="form-control" id="modelAdd" name="modelAdd"
+                                             placeholder="Model"
+                                            pattern="[a-zA-Z0-9]+" maxlength="20" required>
+                                        <div class="invalid-feedback">
+                                            Invalid.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="seat" class="form-label">Seat</label>
+                                        <input type="text" class="form-control" id="seatAdd" name="seatAdd"
+                                             placeholder="Seat" pattern="^[0-9]+$"
+                                            maxlength="2" required >
+                                        <div class="invalid-feedback">
+                                            Invalid. Numbers Only.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="price" class="form-label">Price</label>
+                                        <input type="text" class="form-control" id="priceAdd" name="priceAdd"
+                                             placeholder="Price"
+                                            pattern="^\d+(\.\d{1,2})?$" maxlength="8" required>
+                                        <div class="invalid-feedback">
+                                            Invalid. Numbers Only. May have 2 decimals.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-warning">Create</button>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {%for car in allCars%}
+            <div class="col-sm-3 mx-3 my-3">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.jpg') }}"
+                        class="card-img-top" alt="carphoto">
+
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{car[4]|string + ' ' + car[2] + ' ' + car[3]}}</strong></h5>
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                            data-bs-target="#edit-car{{car[0]|string}}">Edit</button>
+                        <!-- Edit a car function modal -->
+                        <div class="container w-50 m-auto">
+                            <div class="modal fade" id="edit-car{{car[0]|string}}" tabindex="-1"
+                                aria-labelledby="carTitle" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="carTitle">{{car[4]|string + ' ' + car[2] +
+                                                ' ' + car[3]}}</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST" action="/carsOperation" id="edit-form" class="needs-validation"
+                                            novalidate enctype="multipart/form-data">
+                                            <div class="modal-body">
+                                                <div class="row g-3">
+
+                                                    <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.jpg') }}"
+                                                        class="card-img-top" alt="carphoto">
+                                                    
+                                                    <label for="carfile">Upload new photo (not compulsory)</label>
+                                                    <input type="file" id="carfile" name="carfile" accept="image/jpeg"><br>
+
+                                                    <div class="col-12">
+                                                        <label for="rego" class="form-label">Rego</label>
+                                                        <input type="text" class="form-control" id="rego" name="rego"
+                                                            placeholder="Rego" pattern="[A-Z0-9]*" maxlength="6"
+                                                            value="{{car[1]}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Invalid. Capitalised alphabets and numbers only.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6">
+                                                        <label for="year" class="form-label">Year</label>
+                                                        <input type="text" class="form-control" id="year" name="year"
+                                                            placeholder="Year" pattern="[0-9]*" maxlength="4"
+                                                            value="{{car[4]}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Invalid. Numbers only.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6">
+                                                        <label for="brand" class="form-label">Manufacturer</label>
+                                                        <input type="text" class="form-control" id="brand" name="brand"
+                                                            placeholder="brand" pattern="[A-Za-z]*" value="{{car[2]}}"
+                                                            maxlength="30" required>
+                                                        <div class="invalid-feedback">
+                                                            Invalid. Alphabets only.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6">
+                                                        <label for="model" class="form-label">Model</label>
+                                                        <input type="text" class="form-control" id="model" name="model"
+                                                            value="{{car[3]}}" placeholder="Model"
+                                                            pattern="[a-zA-Z0-9]+" maxlength="20" required>
+                                                        <div class="invalid-feedback">
+                                                            Invalid.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6">
+                                                        <label for="seat" class="form-label">Seat</label>
+                                                        <input type="text" class="form-control" id="seat" name="seat"
+                                                            value="{{car[5]}}" placeholder="Seat" pattern="^[0-9]+$"
+                                                            maxlength="2" required>
+                                                        <div class="invalid-feedback">
+                                                            Invalid. Numbers Only.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6">
+                                                        <label for="price" class="form-label">Price</label>
+                                                        <input type="text" class="form-control" id="price" name="price"
+                                                            value="{{car[6]}}" placeholder="Price"
+                                                            pattern="^\d+(\.\d{1,2})?$" maxlength="8" required>
+                                                        <div class="invalid-feedback">
+                                                            Invalid. Numbers Only. May have 2 decimals.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-6">
+                                                        <label for="carID" class="form-label">ID</label>
+                                                        <input type="text" class="form-control" id="carID" name="carID"
+                                                            value="{{car[0]}}" pattern="^[0-9]+$" placeholder="carID"
+                                                            required readonly>
+                                                        <div class="invalid-feedback">
+                                                            Invalid. Numbers Only.
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
+                                                <button type="submit" name="action" value="update" class="btn btn-warning">Update</button>
+                                            </div>
+                                        </form>
+
+
+                                        
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+<script>
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+<script>
+    // alert for successful edit
+    var successMessage = "{{ get_flashed_messages(category_filter=['success'])[0] }}";
+    if (successMessage) {
+        alert(successMessage);
+    }
+</script>
+
+
+{% endblock %}

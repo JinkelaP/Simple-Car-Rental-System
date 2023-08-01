@@ -14,12 +14,13 @@
 <body>
   <!-- Nav bar.-->
   <nav class="navbar navbar-expand-lg" style="background-color: #ffae00;"">
-    <div class=" container">
+    <div class=" container d-flex align-items-center">
     <a href="/" class="d-flex align-items-center mb-2 mb-lg-0">
       <img src="{{ url_for('static', filename='img/logo-nav.png') }}" alt="Logo" width="80" height="30" class="px-2">
     </a>
-    {% if 'loggedin' in session %}
-    <div class="dropdown text-end">
+    {%if 'loggedin' in session%}
+    <div class="dropdown text-end d-flex align-items-center">
+      <p class="username-text text-white my-2 mx-2">{{session['username']}}</p>
       <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
         aria-expanded="false">
         <img src="{{ url_for('static', filename='img/avatar.png') }}" alt="mdo" width="32" height="32" class="rounded-circle">
@@ -33,9 +34,8 @@
         <li><a class="dropdown-item" href="/logout">Log out</a></li>
       </ul>
     </div>
-    {% endif %}
+    {%endif%}
 
-    <!-- nav item should be here -->
     </div>
   </nav>
   <!-- The content of pages.-->
@@ -53,7 +53,7 @@
   <br />
   <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-      <div class="col-md-4 d-flex align-items-center">
+      <div class="col-md-6 d-flex align-items-center">
         <a href="https://github.com/JinkelaP/Simple-Car-Rental-System"
           class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
           Github
