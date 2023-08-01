@@ -27,16 +27,16 @@
                                 aria-label="Close"></button>
                         </div>
                         <form method="POST" action="/carsAdd" id="add-form" class="needs-validation"
-                            novalidate>
+                            novalidate enctype="multipart/form-data">
                             <div class="modal-body">
                                 <div class="row g-3">
                                     
                                     <label for="carfile">Upload new photo (not compulsory)</label>
-                                    <input type="file" id="carfileAdd" name="carfile"><br>
+                                    <input type="file" id="carfileAdd" name="carfileAdd" accept="image/jpeg"><br>
 
                                     <div class="col-12">
                                         <label for="rego" class="form-label">Rego</label>
-                                        <input type="text" class="form-control" id="regoAdd" name="rego"
+                                        <input type="text" class="form-control" id="regoAdd" name="regoAdd"
                                             placeholder="Rego" pattern="[A-Z0-9]*" maxlength="6"
                                             required>
                                         <div class="invalid-feedback">
@@ -46,7 +46,7 @@
 
                                     <div class="col-sm-6">
                                         <label for="year" class="form-label">Year</label>
-                                        <input type="text" class="form-control" id="yearAdd" name="year"
+                                        <input type="text" class="form-control" id="yearAdd" name="yearAdd"
                                             placeholder="Year" pattern="[0-9]*" maxlength="4"
                                              required>
                                         <div class="invalid-feedback">
@@ -56,7 +56,7 @@
 
                                     <div class="col-sm-6">
                                         <label for="brand" class="form-label">Manufacturer</label>
-                                        <input type="text" class="form-control" id="brandAdd" name="brand"
+                                        <input type="text" class="form-control" id="brandAdd" name="brandAdd"
                                             placeholder="brand" pattern="[A-Za-z]*" 
                                             maxlength="30" required>
                                         <div class="invalid-feedback">
@@ -66,7 +66,7 @@
 
                                     <div class="col-sm-6">
                                         <label for="model" class="form-label">Model</label>
-                                        <input type="text" class="form-control" id="modalAdd" name="modal"
+                                        <input type="text" class="form-control" id="modelAdd" name="modelAdd"
                                              placeholder="Model"
                                             pattern="[a-zA-Z0-9]+" maxlength="20" required>
                                         <div class="invalid-feedback">
@@ -76,7 +76,7 @@
 
                                     <div class="col-sm-6">
                                         <label for="seat" class="form-label">Seat</label>
-                                        <input type="text" class="form-control" id="seatAdd" name="seat"
+                                        <input type="text" class="form-control" id="seatAdd" name="seatAdd"
                                              placeholder="Seat" pattern="^[0-9]+$"
                                             maxlength="2" required >
                                         <div class="invalid-feedback">
@@ -86,7 +86,7 @@
 
                                     <div class="col-sm-6">
                                         <label for="price" class="form-label">Price</label>
-                                        <input type="text" class="form-control" id="priceAdd" name="price"
+                                        <input type="text" class="form-control" id="priceAdd" name="priceAdd"
                                              placeholder="Price"
                                             pattern="^\d+(\.\d{1,2})?$" maxlength="8" required>
                                         <div class="invalid-feedback">
@@ -102,33 +102,6 @@
                         </form>
 
 
-                        <script>
-                            (() => {
-                                'use strict'
-
-                                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                                const forms = document.querySelectorAll('.needs-validation')
-
-                                // Loop over them and prevent submission
-                                Array.from(forms).forEach(form => {
-                                    form.addEventListener('submit', event => {
-                                        if (!form.checkValidity()) {
-                                            event.preventDefault()
-                                            event.stopPropagation()
-                                        }
-
-                                        form.classList.add('was-validated')
-                                    }, false)
-                                })
-                            })()
-                        </script>
-                        <script>
-                            // alert for successful edit
-                            var successMessage = "{{ get_flashed_messages(category_filter=['success'])[0] }}";
-                            if (successMessage) {
-                                alert(successMessage);
-                            }
-                        </script>
 
                     </div>
                 </div>
@@ -138,7 +111,7 @@
             {%for car in allCars%}
             <div class="col-sm-3 mx-3 my-3">
                 <div class="card">
-                    <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.png') }}"
+                    <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.jpg') }}"
                         class="card-img-top" alt="carphoto">
 
                     <div class="card-body">
@@ -158,15 +131,15 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <form method="POST" action="/carsOperation" id="edit-form" class="needs-validation"
-                                            novalidate>
+                                            novalidate enctype="multipart/form-data">
                                             <div class="modal-body">
                                                 <div class="row g-3">
 
-                                                    <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.png') }}"
+                                                    <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.jpg') }}"
                                                         class="card-img-top" alt="carphoto">
                                                     
                                                     <label for="carfile">Upload new photo (not compulsory)</label>
-                                                    <input type="file" id="carfile" name="carfile" required><br>
+                                                    <input type="file" id="carfile" name="carfile" accept="image/jpeg"><br>
 
                                                     <div class="col-12">
                                                         <label for="rego" class="form-label">Rego</label>
@@ -200,7 +173,7 @@
 
                                                     <div class="col-sm-6">
                                                         <label for="model" class="form-label">Model</label>
-                                                        <input type="text" class="form-control" id="modal" name="modal"
+                                                        <input type="text" class="form-control" id="model" name="model"
                                                             value="{{car[3]}}" placeholder="Model"
                                                             pattern="[a-zA-Z0-9]+" maxlength="20" required>
                                                         <div class="invalid-feedback">
@@ -232,7 +205,7 @@
                                                         <label for="carID" class="form-label">ID</label>
                                                         <input type="text" class="form-control" id="carID" name="carID"
                                                             value="{{car[0]}}" pattern="^[0-9]+$" placeholder="carID"
-                                                            required disabled>
+                                                            required readonly>
                                                         <div class="invalid-feedback">
                                                             Invalid. Numbers Only.
                                                         </div>
@@ -241,39 +214,13 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                                <button type="submit" class="btn btn-warning">Update</button>
+                                                <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
+                                                <button type="submit" name="action" value="update" class="btn btn-warning">Update</button>
                                             </div>
                                         </form>
 
 
-                                        <!-- <script>
-                                            (() => {
-                                                'use strict'
-
-                                                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                                                const forms = document.querySelectorAll('.needs-validation')
-
-                                                // Loop over them and prevent submission
-                                                Array.from(forms).forEach(form => {
-                                                    form.addEventListener('submit', event => {
-                                                        if (!form.checkValidity()) {
-                                                            event.preventDefault()
-                                                            event.stopPropagation()
-                                                        }
-
-                                                        form.classList.add('was-validated')
-                                                    }, false)
-                                                })
-                                            })()
-                                        </script>
-                                        <script>
-                                            // alert for successful edit
-                                            var successMessage = "{{ get_flashed_messages(category_filter=['success'])[0] }}";
-                                            if (successMessage) {
-                                                alert(successMessage);
-                                            }
-                                        </script> -->
+                                        
 
                                     </div>
                                 </div>
@@ -287,7 +234,33 @@
         </div>
     </div>
 </div>
+<script>
+    (() => {
+        'use strict'
 
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+<script>
+    // alert for successful edit
+    var successMessage = "{{ get_flashed_messages(category_filter=['success'])[0] }}";
+    if (successMessage) {
+        alert(successMessage);
+    }
+</script>
 
 
 {% endblock %}
