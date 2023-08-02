@@ -16,7 +16,7 @@
     <div class="container">
         <div class="row">
             {%for car in allCars%}
-            <div class="col-sm-12 col-md-6 col-lg-3 mx-3 my-3">
+            <div class="col-sm-12 col-md-6 col-lg-4 my-3">
                 <div class="card">
                     <img src="{{ url_for('static', filename='img/cars/' + car[0]|string + '.jpg') }}"
                         class="card-img-top" alt="carphoto">
