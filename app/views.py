@@ -77,8 +77,6 @@ def index():
         if account:
             msg = 'Failed sign up: Account already exists!'
             return render_template("index.html", msg = msg)
-        elif request.form == None:
-            return redirect("/")
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Failed sign up: Invalid email address!'
             return render_template("index.html", msg = msg)

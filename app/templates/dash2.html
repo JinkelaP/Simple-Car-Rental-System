@@ -1,19 +1,18 @@
 <!-- This is the dashboard for admin. -->
 {% extends "base.html" %}
-{% block title %}Dashboard - Admin - Simpler Rental{% endblock %}
+{% block title %}Dashboard - Staff - Simpler Rental{% endblock %}
 
 {% block content %}
 
 <div class="px-4 pt-1 my-1">
     <div class="d-flex top-0 mb-2 pb-3 align-items-end border-bottom">
         <h1 class="display-4 text-body-emphasis fw-bold">Hi {{username}}!</h1><span
-            class="badge text-bg-danger">Admin</span>
+            class="badge text-bg-danger">Staff</span>
     </div>
     <div class="col-lg-12 my-2">
         <a class="btn btn-primary btn-sm px-4 my-2 mx-1" href="/carsList">All Cars</a>
         <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/carsListEdit">Manage Cars</a>
-        <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/manageCustomers">Manage Customers</a>
-        <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/manageStaff">Manage Staff</a>
+        <a class="btn btn-outline-secondary btn-sm px-4 my-2 mx-1" href="/customers">Manage Customers</a>
     </div>
     <h2 class="text-body-emphasis mt-2 pt-1"> You have</h2>
 
@@ -27,11 +26,7 @@
             </div>
             <div class="d-flex align-items-end col-sm-3">
                 <h1 class="display-1 me-3">{{customerTotal}}</h1>
-                <h5 class="text-body-emphasis fw-bold me-3">customers, </h5>
-            </div>
-            <div class="d-flex align-items-end col-sm-3">
-                <h1 class="display-1 me-3">{{staffTotal}}</h1>
-                <h5 class="text-body-emphasis fw-bold me-3">staff!</h5>
+                <h5 class="text-body-emphasis fw-bold me-3">customers! </h5>
             </div>
         </div>
 

@@ -5,6 +5,7 @@ import re
 import mysql.connector
 from mysql.connector import FieldType
 import os
+import bcrypt
 
 dbconn = None
 connection = None
@@ -36,6 +37,13 @@ def userInfo():
     connection.execute(getInfoDetails, (session['id'],))
     userInfoDetails = connection.fetchall()
     return userBasic, userInfoDetails
+
+# encapsulate the passwordEncrypt function
+def passwordEncrypt(userPassword):
+    bytes = userPassword.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashedPsw = bcrypt.hashpw(bytes, salt)
+    return hashedPsw
 
 
 # car list showing all car information
@@ -143,5 +151,106 @@ def carsAdd():
         return redirect('/carsListEdit')
 
 
+    else:
+        return redirect('/')
+    
+#Manage customers
+
+@app.route("/customers", methods = ['GET', 'POST'])
+def customers():
+    
+    userName = request.form.get('userName')
+    userPassword = request.form.get('userPassword')
+    email = request.form.get('userEmail')
+    phoneNumber = request.form.get('phoneNumber')
+    userAddress = request.form.get('userAddress')
+    realName = request.form.get('realName')
+
+    userIDExisting = request.form.get('userIDExisting')
+    userPasswordExisting = request.form.get('userPasswordExisting')
+    emailExisting = request.form.get('userEmailExisting')
+    phoneNumberExisting = request.form.get('phoneNumberExisting')
+    userAddressExisting = request.form.get('userAddressExisting')
+    realNameExisting = request.form.get('realNameExisting')
+    userInfoListExisting = [realNameExisting,  emailExisting, phoneNumberExisting, userAddressExisting]
+    infoTableExisting = ['realName', 'email', 'phoneNumber', 'userAddress']
+
+    action = request.form.get('action')
+    
+    #Add new customers
+    if userName:
+        #form info back-end validation
+        connection = getCursor()
+        connection.execute('SELECT * FROM users WHERE userName = %s', (userName,))
+        account = connection.fetchall()
+        # If account exists show error and validation checks
+        if account:
+            flash('Failed sign up: Account already exists!', 'success')
+            return redirect('/customers')
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            flash('Failed sign up: Invalid email address!', 'success')
+            return redirect('/customers')
+
+        else:
+        # use bcrypt to encrypt the password
+            encryptedPassword = passwordEncrypt(userPassword)
+            # create account in users
+            connection.execute("INSERT INTO users \
+                            (userPermission,userName,userPassword) \
+                            VALUES (3, %s, %s);", \
+                                (userName, encryptedPassword))
+            
+            # create account in customers
+            connection.execute('SELECT userID FROM users WHERE userName = %s', (userName,))
+            userID = connection.fetchall()[0][0]
+
+            connection.execute("INSERT INTO customerinfo \
+                            (userID, realName, \
+                            email, phoneNumber, userAddress)\
+                            VALUES (%s, %s, %s, %s, %s);", \
+                                (userID, realName, \
+                                email, phoneNumber, userAddress))
+            
+            flash('New account created!', 'success')
+            return redirect('/customers')
+    
+    #Edit customers
+    elif userIDExisting and action != 'delete':
+        #update info
+        
+        if emailExisting or phoneNumberExisting or userAddressExisting or realNameExisting:
+            for index, item in enumerate(userInfoListExisting):
+                if item:
+                    updateCustomerInfo = f'UPDATE customerinfo SET {str(infoTableExisting[index])} = "{item}" WHERE userID = %s ;'
+                    connection = getCursor()
+                    connection.execute(updateCustomerInfo,\
+                                        (userIDExisting,))
+
+        if userPasswordExisting:
+            connection = getCursor()
+            connection.execute('UPDATE users SET userPassword = %s WHERE userID = %s ;', (passwordEncrypt(userPassword), userIDExisting,))
+            session.pop('loggedin', None)
+            session.pop('id', None)
+            session.pop('username', None)
+        
+        flash('Customer profile update successful!', 'success')
+        return redirect('/customers')
+    
+    #Delete customer
+    elif userIDExisting and action == 'delete':
+        connection = getCursor()
+        connection.execute('DELETE FROM users WHERE userID = %s;',(userIDExisting,))
+        flash('Customer removed!', 'success')
+        return redirect('/customers')
+
+    
+    
+    elif 'loggedin' in session and userInfo()[0][0][1] != 3:
+        connection = getCursor()
+        connection.execute('SELECT * FROM users JOIN customerInfo ON users.userID=customerInfo.userID;')
+        customerInfo = connection.fetchall()
+
+        userPermissionJinja = userInfo()[0][0][1]
+        return render_template('customers.html', customerInfo=customerInfo, userInfoJinja=userPermissionJinja)
     else:
         return redirect('/')
