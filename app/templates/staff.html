@@ -1,12 +1,12 @@
 <!-- This is the dashboard for admin. -->
 {% extends "base.html" %}
-{% block title %}Customers - Simpler Rental{% endblock %}
+{% block title %}Staff - Simpler Rental{% endblock %}
 
 {% block content %}
 
 <div class="px-4 pt-1 my-2">
     <div class="border-bottom">
-        <h1 class="display-4 text-body-emphasis fw-bold">Manage customers</h1>
+        <h1 class="display-4 text-body-emphasis fw-bold">Manage staff</h1>
         <p class="lead"></p>
 
     </div>
@@ -15,21 +15,21 @@
 
     <div class="container">
         <div class="col-lg-6">
-            <!-- Add a new customer function modal -->
-            {%if userInfoJinja==1 %}
+            <!-- Add a new staff function modal -->
+
             <button type="button" class="btn btn-warning px-4 my-3" data-bs-toggle="modal"
-                data-bs-target="#customerAdd">Add
-                a new customer</button>
+                data-bs-target="#staffAdd">Add
+                a new staff</button>
             <div class="container w-50 m-auto">
-                <div class="modal fade" id="customerAdd" tabindex="-1" aria-labelledby="carTitle" aria-hidden="true">
+                <div class="modal fade" id="staffAdd" tabindex="-1" aria-labelledby="carTitle" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="customerAddTitle">Add a new customer</h1>
+                                <h1 class="modal-title fs-5" id="customerAddTitle">Add a new staff</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form method="POST" action="/customers" id="newCustomer-form" class="needs-validation"
+                            <form method="POST" action="/staff" id="newCustomer-form" class="needs-validation"
                                 novalidate>
                                 <div class="modal-body">
                                     <div class="row g-3">
@@ -109,7 +109,6 @@
                     </div>
                 </div>
             </div>
-            {%endif%}
             <table class="table table-striped table-bordered border-100 table-responsive my-2">
 
                 <thead>
@@ -120,7 +119,8 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    {% for member in customerInfo %}
+                    {% for member in staffInfo %}
+                    {% if member[1] != 1 %}
                     <tr>
                         {% for entry in member %}
                         {% if loop.index0 == 0 %}
@@ -129,13 +129,10 @@
                         <td>{{entry}}</td>
                         {% elif loop.index0 == 5 %}
                         <td><u><b>{{entry}}</b></u></td>
-                        <td>{%if userInfoJinja==1 %}<button type="button" class="btn btn-dark"
+                        <td><button type="button" class="btn btn-dark"
                                 data-bs-toggle="modal" data-bs-target="#edit-member-{{ member[0] }}">
                                 Edit
-                            </button>{%else%}<button type="button" class="btn btn-primary"
-                                data-bs-toggle="modal" data-bs-target="#edit-member-{{ member[0] }}">
-                                Details
-                            </button>{%endif%}
+                            </button>
                             <!-- Edit members page -->
                             <div class="modal fade" id="edit-member-{{ member[0] }}" tabindex="-1"
                                 aria-labelledby="member-name" aria-hidden="true">
@@ -146,7 +143,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <form method="POST" action="/customers" id="edit-form" class="needs-validation"
+                                        <form method="POST" action="/staff" id="edit-form" class="needs-validation"
                                             novalidate>
                                             <div class="modal-body">
                                                 <div class="row g-3">
@@ -154,16 +151,12 @@
                                                     <div class="col-12">
                                                         <label for="realNameExisting" class="form-label">Your
                                                             Name</label>
-                                                        {%if userInfoJinja != 1 %}
-                                                        <input type="text" class="form-control" id="realNameExisting"
-                                                            name="realNameExisting" placeholder="Name"
-                                                            value="{{member[5]}}" maxlength="80" disabled>
-                                                        {%else%}
+                                                        
                                                         <input type="text" class="form-control" id="realNameExisting"
                                                             name="realNameExisting" placeholder="Name"
                                                             value="{{member[5]}}" maxlength="80">
 
-                                                        {%endif%}
+                                                        
                                                         <div class="invalid-feedback">
                                                             Invalid.
                                                         </div>
@@ -172,15 +165,11 @@
                                                     <div class="col-sm-6">
                                                         <label for="userNameExisting"
                                                             class="form-label">Username</label>
-                                                        {%if userInfoJinja != 1 %}
-                                                        <input type="text" class="form-control" id="userNameExisting"
-                                                            name="userNameExisting" value="{{member[2]}}"
-                                                            pattern="^[a-zA-Z0-9]*$" maxlength="20" readonly>
-                                                        {%else%}
+                                                        
                                                         <input type="text" class="form-control" id="userNameExisting"
                                                             name="userNameExisting" value="{{member[2]}}"
                                                             pattern="^[a-zA-Z0-9]*$" maxlength="20" disabled>
-                                                        {%endif%}
+                                                        
                                                         <div class="invalid-feedback">
                                                             Invalid. Alphabets and numbers only. max 20 characters.
                                                         </div>
@@ -189,17 +178,12 @@
                                                     <div class="col-sm-6">
                                                         <label for="userPasswordExisting"
                                                             class="form-label">Password</label>
-                                                        {%if userInfoJinja != 1 %}
-                                                        <input type="password" class="form-control"
-                                                            id="userPasswordExisting" name="userPasswordExisting"
-                                                            pattern="^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{8,}$" maxlength="30"
-                                                            disabled>
-                                                        {%else%}
+                                                        
                                                         <input type="password" class="form-control"
                                                             id="userPasswordExisting" name="userPasswordExisting"
                                                             pattern="^(?=.*[A-Z])(?=.*[a-zA-Z0-9]).{8,}$"
                                                             maxlength="30">
-                                                        {%endif%}
+                                                        
                                                         <div class="invalid-feedback">
                                                             Alphabets and numbers only. Must have one capitalised
                                                             character. Minimum 8 characters.
@@ -208,19 +192,13 @@
 
                                                     <div class="col-sm-6">
                                                         <label for="emailExisting" class="form-label">Email</label>
-                                                        {%if userInfoJinja != 1 %}
-                                                        <input type="email" class="form-control" id="userEmailExisting"
-                                                            name="userEmailExisting" placeholder="email@example.co.nz"
-                                                            value="{{member[6]}}"
-                                                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                                                            maxlength="255" disabled>
-                                                        {%else%}
+                                                        
                                                         <input type="email" class="form-control" id="userEmailExisting"
                                                             name="userEmailExisting" placeholder="email@example.co.nz"
                                                             value="{{member[6]}}"
                                                             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                                                             maxlength="255">
-                                                        {%endif%}
+                                                       
                                                         <div class="invalid-feedback">
                                                             Invalid.
                                                         </div>
@@ -229,16 +207,11 @@
                                                     <div class="col-sm-6">
                                                         <label for="phoneNumberExisting" class="form-label">Phone
                                                             Number</label>
-                                                        {%if userInfoJinja != 1 %}
-                                                        <input type="text" class="form-control" id="phoneNumberExisting"
-                                                            name="phoneNumberExisting" placeholder="Phone Number"
-                                                            value="{{member[7]}}" pattern="^[0-9]+$" maxlength="12"
-                                                            disabled>
-                                                        {%else%}
+                                                        
                                                         <input type="text" class="form-control" id="phoneNumberExisting"
                                                             name="phoneNumberExisting" placeholder="Phone Number"
                                                             value="{{member[7]}}" pattern="^[0-9]+$" maxlength="12">
-                                                        {%endif%}
+                                                        
                                                         <div class="invalid-feedback">
                                                             Invalid. Numbers Only.
                                                         </div>
@@ -248,15 +221,11 @@
                                                     <div class="col-12">
                                                         <label for="userAddressExisting"
                                                             class="form-label">Address</label>
-                                                        {%if userInfoJinja != 1 %}
-                                                        <input type="text" class="form-control" id="userAddressExisting"
-                                                            name="userAddressExisting" placeholder="Address"
-                                                            value="{{member[8]}}" maxlength="100" disabled>
-                                                        {%else%}
+                                                       
                                                         <input type="text" class="form-control" id="userAddressExisting"
                                                             name="userAddressExisting" placeholder="Address"
                                                             value="{{member[8]}}" maxlength="100">
-                                                        {%endif%}
+                                                       
                                                         <div class="invalid-feedback">
                                                             Invalid.
                                                         </div>
@@ -274,10 +243,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                {%if userInfoJinja==1 %}<button name="action" value="delete"
+                                                <button name="action" value="delete"
                                                     type="submit" class="btn btn-danger">Delete</button>
                                                 <button name="action" value="submit" type="submit"
-                                                    class="btn btn-warning">Update</button>{%endif%}
+                                                    class="btn btn-warning">Update</button>
                                             </div>
                                         </form>
                                         
@@ -291,6 +260,7 @@
 
                         {% endfor %}
                     </tr>
+                    {%endif%}
                     {% endfor %}
 
                 </tbody>

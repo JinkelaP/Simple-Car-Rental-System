@@ -3,7 +3,7 @@ from app import app, connect
 from flask import render_template, request, redirect, url_for, session, flash
 import re
 import mysql.connector
-from mysql.connector import FieldType
+
 import os
 import bcrypt
 
@@ -229,9 +229,7 @@ def customers():
         if userPasswordExisting:
             connection = getCursor()
             connection.execute('UPDATE users SET userPassword = %s WHERE userID = %s ;', (passwordEncrypt(userPassword), userIDExisting,))
-            session.pop('loggedin', None)
-            session.pop('id', None)
-            session.pop('username', None)
+
         
         flash('Customer profile update successful!', 'success')
         return redirect('/customers')
@@ -247,10 +245,106 @@ def customers():
     
     elif 'loggedin' in session and userInfo()[0][0][1] != 3:
         connection = getCursor()
-        connection.execute('SELECT * FROM users JOIN customerInfo ON users.userID=customerInfo.userID;')
+        connection.execute('SELECT * FROM users JOIN customerinfo ON users.userID=customerinfo.userID;')
         customerInfo = connection.fetchall()
 
         userPermissionJinja = userInfo()[0][0][1]
         return render_template('customers.html', customerInfo=customerInfo, userInfoJinja=userPermissionJinja)
+    else:
+        return redirect('/')
+    
+# manage staff, basically the same function as managing customers
+@app.route("/staff", methods = ['GET', 'POST'])
+def staff():
+    
+    userName = request.form.get('userName')
+    userPassword = request.form.get('userPassword')
+    email = request.form.get('userEmail')
+    phoneNumber = request.form.get('phoneNumber')
+    userAddress = request.form.get('userAddress')
+    realName = request.form.get('realName')
+
+    userIDExisting = request.form.get('userIDExisting')
+    userPasswordExisting = request.form.get('userPasswordExisting')
+    emailExisting = request.form.get('userEmailExisting')
+    phoneNumberExisting = request.form.get('phoneNumberExisting')
+    userAddressExisting = request.form.get('userAddressExisting')
+    realNameExisting = request.form.get('realNameExisting')
+    userInfoListExisting = [realNameExisting,  emailExisting, phoneNumberExisting, userAddressExisting]
+    infoTableExisting = ['realName', 'email', 'phoneNumber', 'userAddress']
+
+    action = request.form.get('action')
+    
+    #Add new customers
+    if userName:
+        #form info back-end validation
+        connection = getCursor()
+        connection.execute('SELECT * FROM users WHERE userName = %s', (userName,))
+        account = connection.fetchall()
+        # If account exists show error and validation checks
+        if account:
+            flash('Failed sign up: Account already exists!', 'success')
+            return redirect('/staff')
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            flash('Failed sign up: Invalid email address!', 'success')
+            return redirect('/staff')
+
+        else:
+        # use bcrypt to encrypt the password
+            encryptedPassword = passwordEncrypt(userPassword)
+            # create account in users
+            connection.execute("INSERT INTO users \
+                            (userPermission,userName,userPassword) \
+                            VALUES (3, %s, %s);", \
+                                (userName, encryptedPassword))
+            
+            # create account in staff
+            connection.execute('SELECT userID FROM users WHERE userName = %s', (userName,))
+            userID = connection.fetchall()[0][0]
+
+            connection.execute("INSERT INTO staffinfo \
+                            (userID, realName, \
+                            email, phoneNumber, userAddress)\
+                            VALUES (%s, %s, %s, %s, %s);", \
+                                (userID, realName, \
+                                email, phoneNumber, userAddress))
+            
+            flash('New staff account created!', 'success')
+            return redirect('/staff')
+    
+    #Edit customers
+    elif userIDExisting and action != 'delete':
+        #update info
+        
+        if emailExisting or phoneNumberExisting or userAddressExisting or realNameExisting:
+            for index, item in enumerate(userInfoListExisting):
+                if item:
+                    updateStaffInfo = f'UPDATE staffinfo SET {str(infoTableExisting[index])} = "{item}" WHERE userID = %s ;'
+                    connection = getCursor()
+                    connection.execute(updateStaffInfo,\
+                                        (userIDExisting,))
+
+        if userPasswordExisting:
+            connection = getCursor()
+            connection.execute('UPDATE users SET userPassword = %s WHERE userID = %s ;', (passwordEncrypt(userPassword), userIDExisting,))
+        
+        flash('Staff profile update successful!', 'success')
+        return redirect('/staff')
+    
+    #Delete customer
+    elif userIDExisting and action == 'delete':
+        connection = getCursor()
+        connection.execute('DELETE FROM users WHERE userID = %s;',(userIDExisting,))
+        flash('Staff removed!', 'success')
+        return redirect('/staff')
+
+    
+    
+    elif 'loggedin' in session and userInfo()[0][0][1] == 1:
+        connection = getCursor()
+        connection.execute('SELECT * FROM users JOIN staffinfo ON users.userID=staffinfo.userID;')
+        staffInfo = connection.fetchall()
+
+        return render_template('staff.html', staffInfo=staffInfo)
     else:
         return redirect('/')
