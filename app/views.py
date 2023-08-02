@@ -3,7 +3,6 @@ from app import app, connect
 from flask import render_template, request, redirect, url_for, session, flash
 import re
 import mysql.connector
-from mysql.connector import FieldType
 import bcrypt
 
 dbconn = None
@@ -77,8 +76,6 @@ def index():
         if account:
             msg = 'Failed sign up: Account already exists!'
             return render_template("index.html", msg = msg)
-        elif request.form == None:
-            return redirect("/")
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Failed sign up: Invalid email address!'
             return render_template("index.html", msg = msg)
@@ -225,3 +222,5 @@ def profile():
 
     else:
         return redirect('/')
+    
+

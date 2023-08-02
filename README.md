@@ -1,6 +1,13 @@
 # Simple-Car-Rental-System
 A web app that users can login into their dashboard separately with different functions provided.
 
+## Testing account & Password:
+
+adminRental, rental-HaochenZhu
+staffRental1, rental-HaochenZhu
+
+You can sign up a unique customer account by yourself!
+
 References
 
 ## Banner
