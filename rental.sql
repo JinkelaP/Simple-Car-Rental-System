@@ -78,14 +78,14 @@ INSERT INTO users VALUES
 (10008, 3, 'custRental4', '$2b$12$gJ3wlX6SdOYOx0k./7zdJ.dLzu9a6fQ5beTQVLf4bwBGHv7.cGY36'),
 (10009, 3, 'custRental5', '$2b$12$gJ3wlX6SdOYOx0k./7zdJ.dLzu9a6fQ5beTQVLf4bwBGHv7.cGY36');
 
-INSERT INTO staffInfo VALUES
+INSERT INTO staffinfo VALUES
 
 (10001, 'Haochen', 'haochen.sam.zhu@gmail.com', 0220220222, 'Example Address'),
 (10002, 'staff1Name', 'staff1@example.com', 0221111111, 'Example Address'),
 (10003, 'staff2Name', 'staff2@example.com', 0221555511, 'Example Address'),
 (10004, 'staff3Name', 'staff3@example.com', 0221566511, 'Example Address');
 
-INSERT INTO customerInfo VALUES
+INSERT INTO customerinfo VALUES
 
 (10005, 'cust1Name', 'cust1@example.com', 0224545451, 'Example Address'),
 (10006, 'cust2Name', 'cust2@example.com', 0224546651, 'Example Address'),
