@@ -17,13 +17,41 @@
     <div class=" container d-flex align-items-center">
     <a href="/" class="d-flex align-items-center mb-2 mb-lg-0">
       <img src="{{ url_for('static', filename='img/logo-nav.png') }}" alt="Logo" width="80" height="30" class="px-2">
-    </a>
+    </a><a class="navbar-brand mb-0 h1 text-white" href="/"><strong>Simpler</strong></a>
+
+
     {%if 'loggedin' in session%}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbars-simpler"
+      aria-controls="navbars-NZOly" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbars-simpler">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a href="/carsList"
+            class="nav-link {% block carList_active %}{% endblock %} text-white">All cars</a>
+        </li>
+        {% if userPerm != 3 %}
+        <li class="nav-item"><a href="/carsListEdit"
+            class="nav-link {% block carListEdit_active %}{% endblock %} text-white">Manage
+            cars</a></li>
+        <li class="nav-item"><a href="/customers"
+            class="nav-link {% block customers_active %}{% endblock %} text-white">Manage
+            customers</a></li>
+        {% if userPerm != 2 %}
+        <li class="nav-item"><a href="/staff" class="nav-link {% block staff_active %}{% endblock %} text-white">Manage
+            staff</a>
+        </li>
+        {%endif%}
+        {%endif%}
+      </ul>
+
+    </div>
     <div class="dropdown text-end d-flex align-items-center">
       <p class="username-text text-white my-2 mx-2">{{session['username']}}</p>
       <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
         aria-expanded="false">
-        <img src="{{ url_for('static', filename='img/avatar.png') }}" alt="mdo" width="32" height="32" class="rounded-circle">
+        <img src="{{ url_for('static', filename='img/avatar.png') }}" alt="mdo" width="32" height="32"
+          class="rounded-circle">
       </a>
       <ul class="dropdown-menu text-small" data-popper-placement="bottom-start"
         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 34px);">
