@@ -21,20 +21,21 @@ app.secret_key = 'youCannotGuessIt'
 
 # check whether a user is admin or staff or customer
 def userInfo():
-    connection = getCursor()
-    connection.execute('SELECT userID, userPermission, userName FROM users \
-                           WHERE userID = %s;', (session['id'],))
-    userBasic = connection.fetchall()
+    if 'loggedin' in session:
+        connection = getCursor()
+        connection.execute('SELECT userID, userPermission, userName FROM users \
+                                WHERE userID = %s;', (session['id'],))
+        userBasic = connection.fetchall()
 
-    if userBasic[0][1] == 1 or userBasic[0][1] == 2:
-        infoTable = 'staffinfo'
-    else:
-        infoTable = 'customerinfo'
-    
-    getInfoDetails = f'SELECT userID, realName, email, phoneNumber, userAddress FROM {infoTable} WHERE userID = %s;'
-    connection.execute(getInfoDetails, (session['id'],))
-    userInfoDetails = connection.fetchall()
-    return userBasic, userInfoDetails
+        if userBasic[0][1] == 1 or userBasic[0][1] == 2:
+            infoTable = 'staffinfo'
+        else:
+            infoTable = 'customerinfo'
+
+        getInfoDetails = f'SELECT userID, realName, email, phoneNumber, userAddress FROM {infoTable} WHERE userID = %s;'
+        connection.execute(getInfoDetails, (session['id'],))
+        userInfoDetails = connection.fetchall()
+        return userBasic, userInfoDetails
 
 # encapsulate the passwordEncrypt function
 def passwordEncrypt(userPassword):
