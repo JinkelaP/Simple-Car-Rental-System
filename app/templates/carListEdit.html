@@ -1,12 +1,13 @@
 <!-- This is the dashboard for admin. -->
 {% extends "base.html" %}
 {% block title %}Manage cars - Simpler Rental{% endblock %}
-
+{% block carListEdit_active %}active{% endblock %}
 {% block content %}
 
 <div class="px-4 pt-1 my-1">
     <div class="border-bottom">
-        <h1 class="display-4 text-body-emphasis fw-bold">Manage cars</h1>
+        <a class="btn btn-outline-dark px-4 my-1" href="/">Back</a>
+        <h1 class="display-4 text-body-emphasis fw-bold mt-3">Manage cars</h1>
         <p class="lead"></p>
 
     </div>

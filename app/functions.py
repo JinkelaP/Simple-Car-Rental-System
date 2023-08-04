@@ -53,7 +53,7 @@ def carsList():
         connection = getCursor()
         connection.execute('SELECT * FROM cars;')
         allCars = connection.fetchall()
-        return render_template('carList.html', allCars=allCars)
+        return render_template('carList.html', allCars=allCars, userPerm = userInfo()[0][0][1])
 
     else:
         return redirect('/')
@@ -65,7 +65,7 @@ def carsListEdit():
         connection = getCursor()
         connection.execute('SELECT * FROM cars;')
         allCars = connection.fetchall()
-        return render_template('carListEdit.html', allCars=allCars)
+        return render_template('carListEdit.html', allCars=allCars, userPerm = userInfo()[0][0][1])
 
 
     else:
@@ -249,7 +249,7 @@ def customers():
         customerInfo = connection.fetchall()
 
         userPermissionJinja = userInfo()[0][0][1]
-        return render_template('customers.html', customerInfo=customerInfo, userInfoJinja=userPermissionJinja)
+        return render_template('customers.html', customerInfo=customerInfo, userInfoJinja=userPermissionJinja, userPerm = userInfo()[0][0][1])
     else:
         return redirect('/')
     
@@ -345,6 +345,6 @@ def staff():
         connection.execute('SELECT * FROM users JOIN staffinfo ON users.userID=staffinfo.userID;')
         staffInfo = connection.fetchall()
 
-        return render_template('staff.html', staffInfo=staffInfo)
+        return render_template('staff.html', staffInfo=staffInfo,userPerm = userInfo()[0][0][1])
     else:
         return redirect('/')
