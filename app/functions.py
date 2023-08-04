@@ -99,6 +99,7 @@ def carsOperation():
                 carID = request.form.get('carID')
                 filename = f"{carID}.jpg"
                 filepath = os.path.join('app','static', 'img', 'cars', filename)
+                # filepath = os.path.join('/home', 'HaochenZhu2023', 'Simple-Car-Rental-System', 'app','static', 'img', 'cars', filename)
                 carfile.save(filepath)
             
             flash('Car edited!', 'success')
@@ -110,6 +111,7 @@ def carsOperation():
 
             filename = f"{carID}.jpg"
             filepath = os.path.join('app', 'static', 'img', 'cars', filename)
+            # filepath = os.path.join('/home', 'HaochenZhu2023', 'Simple-Car-Rental-System', 'app', 'static', 'img', 'cars', filename)
             try:
                 os.remove(filepath)
             except FileNotFoundError:
@@ -145,6 +147,7 @@ def carsAdd():
             # carID = request.form.get('carID')
             filename = f"{carID}.jpg"
             filepath = os.path.join('app','static', 'img', 'cars', filename)
+            # filepath = os.path.join('/home', 'HaochenZhu2023', 'Simple-Car-Rental-System', 'app','static', 'img', 'cars', filename)
             carfile.save(filepath)
         
         flash('New car created!', 'success')
