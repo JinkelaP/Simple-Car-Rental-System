@@ -59,7 +59,7 @@
                                             <label for="email" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="userEmail" name="userEmail"
                                                 placeholder="email@example.co.nz"
-                                                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" maxlength="255"
+                                                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" maxlength="40"
                                                 required>
                                             <div class="invalid-feedback">
                                                 Invalid.
@@ -176,7 +176,7 @@
                                                         {%if userInfoJinja != 1 %}
                                                         <input type="text" class="form-control" id="userNameExisting"
                                                             name="userNameExisting" value="{{member[2]}}"
-                                                            pattern="^[a-zA-Z0-9]*$" maxlength="20" readonly>
+                                                            pattern="^[a-zA-Z0-9]*$" maxlength="20" disabled>
                                                         {%else%}
                                                         <input type="text" class="form-control" id="userNameExisting"
                                                             name="userNameExisting" value="{{member[2]}}"
@@ -214,13 +214,13 @@
                                                             name="userEmailExisting" placeholder="email@example.co.nz"
                                                             value="{{member[6]}}"
                                                             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                                                            maxlength="255" disabled>
+                                                            maxlength="40" disabled>
                                                         {%else%}
                                                         <input type="email" class="form-control" id="userEmailExisting"
                                                             name="userEmailExisting" placeholder="email@example.co.nz"
                                                             value="{{member[6]}}"
                                                             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                                                            maxlength="255">
+                                                            maxlength="40">
                                                         {%endif%}
                                                         <div class="invalid-feedback">
                                                             Invalid.
