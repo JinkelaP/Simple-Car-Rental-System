@@ -278,7 +278,7 @@ def staff():
 
     action = request.form.get('action')
     
-    #Add new customers
+    #Add new staff
     if userName:
         #form info back-end validation
         connection = getCursor()
@@ -298,7 +298,7 @@ def staff():
             # create account in users
             connection.execute("INSERT INTO users \
                             (userPermission,userName,userPassword) \
-                            VALUES (3, %s, %s);", \
+                            VALUES (2, %s, %s);", \
                                 (userName, encryptedPassword))
             
             # create account in staff
@@ -315,7 +315,7 @@ def staff():
             flash('New staff account created!', 'success')
             return redirect('/staff')
     
-    #Edit customers
+    #Edit staff
     elif userIDExisting and action != 'delete':
         #update info
         

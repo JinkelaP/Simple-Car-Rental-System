@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS staffinfo
 (
 userID INT PRIMARY KEY NOT NULL,
 realName VARCHAR(80) NOT NULL,
-email VARCHAR(255) NOT NULL,
-phoneNumber BIGINT,
+email VARCHAR(40) NOT NULL,
+phoneNumber VARCHAR(20),
 userAddress VARCHAR(200),
 
 FOREIGN KEY (userID) REFERENCES users(userID)
@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS customerinfo
 (
 userID INT PRIMARY KEY NOT NULL,
 realName VARCHAR(80) NOT NULL,
-email VARCHAR(255) NOT NULL,
-phoneNumber BIGINT,
+email VARCHAR(40) NOT NULL,
+phoneNumber VARCHAR(20),
 userAddress VARCHAR(200),
 
 FOREIGN KEY (userID) REFERENCES users(userID)
