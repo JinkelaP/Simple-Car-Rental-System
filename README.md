@@ -4,7 +4,10 @@ A web app that users can login into their dashboard separately with different fu
 ## Testing account & Password:
 
 adminRental, rental-HaochenZhu
+
 staffRental1, rental-HaochenZhu
+
+custRental1, rental-HaochenZhu
 
 You can sign up a unique customer account by yourself!
 
